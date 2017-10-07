@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import {Link} from 'react-router-dom'
 import * as BooksAPI from '../api/BooksAPI'
 import Book from './Book'
+import {NONE} from '../util/Constants'
 
 /**
  * Represents the page where a user can search for possible books to add to their shelf
@@ -28,7 +29,7 @@ class SearchBooks extends Component
 
 	getShelf = (searchResult) =>{
 		const book = this.props.books.filter((myBook) => myBook.id === searchResult.id);
-		return book.length > 0 ? book[0].shelf : 'na';
+		return book.length > 0 ? book[0].shelf : NONE.shelf;
 	};
 
 	searchBooks = (query) => {

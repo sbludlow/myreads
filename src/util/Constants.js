@@ -30,7 +30,7 @@ export const READ = {
  * @type {{shelf: string, title: string}}
  */
 export const NONE = {
-	shelf: "noShelf",
+	shelf: "na",
 	title: "None"
 };
 
