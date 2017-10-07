@@ -1,13 +1,10 @@
 // framework
 import React from 'react'
-import { Route } from 'react-router-dom';
-
+import {Route} from 'react-router-dom';
 // API
 import * as BooksAPI from './BooksAPI'
-
 // CSS
 import './App.css'
-
 // Internal Components
 import ListBooks from './ListBooks';
 import SearchBooks from './SearchBooks';
@@ -44,23 +41,15 @@ class BooksApp extends React.Component {
 		BooksAPI.update(book, list).then(this.loadBookshelf)
 	};
 
-	getShelf = (searchResult) =>{
-		// console.log('search result'+searchResult)
-		const book = this.props.books.filter((myBook) => myBook.id === searchResult.id)
-		const shelf = !book ? book[0].shelf : 'na'
-		console.log('shelf is : '+shelf)
-		return shelf;
-	}
-
 	render() {
 		return (
 			<div>
 				<Route path='/' exact render={() => (
-					<ListBooks getShelf={this.getShelf} currentlyReading={this.state.currentlyReading} wantToRead={this.state.wantToRead} read={this.state.read} addToList={this.addToList}/>
+					<ListBooks currentlyReading={this.state.currentlyReading} wantToRead={this.state.wantToRead} read={this.state.read} addToList={this.addToList}/>
 				)}/>
 
 				<Route path='/search' render={(history) => (
-					<SearchBooks books={this.state.books} getShelf={this.getShelf} addToList={this.addToList} />
+					<SearchBooks books={this.state.books} addToList={this.addToList} />
 				)}/>
 			</div>
 		)

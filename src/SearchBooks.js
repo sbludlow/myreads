@@ -1,11 +1,9 @@
 // framework
-import React , {Component} from 'react'
+import React, {Component} from 'react'
 import PropTypes from 'prop-types'
-import { Link } from 'react-router-dom'
-
+import {Link} from 'react-router-dom'
 // API
 import * as BooksAPI from './BooksAPI'
-
 // Internal Components
 import Book from './Book'
 
@@ -28,12 +26,19 @@ class SearchBooks extends Component
 		this.searchInput.focus();
 	}
 
+	getShelf = (searchResult) =>{
+		const book = this.props.books.filter((myBook) => myBook.id === searchResult.id)
+		return book.length > 0 ? book[0].shelf : 'na'
+	}
+
 	searchBooks = (query) => {
+		this.setState({
+			query : query.trim()
+		})
 		BooksAPI.search(query, 10).then(searchResults => {
 			const results = (!searchResults || searchResults.error) ? [] : searchResults
 			this.setState({
 				searchResults : results,
-				query : query.trim()
 			})
 		})
 	}
@@ -58,7 +63,7 @@ class SearchBooks extends Component
 					<ol className="books-grid">
 						{
 							showingResults.map((searchResult) => (
-								<Book book={searchResult} shelf={this.props.getShelf(searchResult)} key={searchResult.id} addToList={this.props.addToList}/>
+								<Book book={searchResult} shelf={this.getShelf(searchResult)} key={searchResult.id} addToList={this.props.addToList}/>
 							))
 						}
 					</ol>
