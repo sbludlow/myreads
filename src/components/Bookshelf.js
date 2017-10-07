@@ -1,40 +1,38 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import Book from './Book'
+import {Link} from 'react-router-dom'
+import Shelf from './Shelf'
+import {DISPLAY_BOOKSHELVES} from '../util/Constants'
 
 /**
- * Represents a single shelf containing a number 0+ of books
- * @param bookshelfTitle name of the shelf
- * @param addToShelf callback for when a user wants to move a book
- * @param books array of books on the shelf
+ * Page where a user can see their individual bookshelves
+ * @param books All books (unsorted) on the bookshelf
+ * @param addToShelf callback for choosing a book to move to a shelf
  * @returns {XML}
  * @constructor
  */
-const Bookshelf = ({bookshelfTitle, addToShelf, books}) =>
+const Bookshelf = ({books, addToShelf}) =>
 {
 	Bookshelf.propTypes = {
-		bookshelfTitle: PropTypes.string.isRequired,
-		addToShelf : PropTypes.func.isRequired,
-		books: PropTypes.array
+		books: PropTypes.array,
+		addToShelf: PropTypes.func.isRequired
 	};
 
 	return(
-		<div className="bookshelf">
-			<h2 className="bookshelf-title">{bookshelfTitle}</h2>
-			<div className="bookshelf-books">
-				<ol className="books-grid">
-					{
-						books.length > 0
-						?
-							(
-								books.map((book) => (
-									<Book book={book} shelf={book.shelf} key={book.id} addToShelf={addToShelf}/>
-								))
-							)
-						:
-						"You have no books on this shelf"
-					}
-				</ol>
+		<div className="list-books">
+			<div className="list-books-title">
+				<h1>My Diggity Diggity Reads</h1>
+			</div>
+			<div className="list-books-content">
+				<div>{
+					DISPLAY_BOOKSHELVES.map((bookshelf, index) =>
+						<Shelf key={index} bookshelfTitle={bookshelf.title} books={books.filter((book) => book.shelf === bookshelf.shelf)} addToShelf={addToShelf}/>
+					)
+				}
+				</div>
+			</div>
+			<div className="open-search">
+				<Link to='/search' title="Add a book">Add a book</Link>
 			</div>
 		</div>
 	)
