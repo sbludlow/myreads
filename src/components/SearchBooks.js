@@ -1,52 +1,51 @@
-// framework
 import React, {Component} from 'react'
 import PropTypes from 'prop-types'
 import {Link} from 'react-router-dom'
-// API
-import * as BooksAPI from './BooksAPI'
-// Internal Components
+import * as BooksAPI from '../api/BooksAPI'
 import Book from './Book'
 
+/**
+ * Represents the page where a user can search for possible books to add to their shelf
+ */
 class SearchBooks extends Component
 {
 	static propTypes = {
-		addToList: PropTypes.func.isRequired,
+		addToShelf: PropTypes.func.isRequired,
 		books : PropTypes.array.isRequired
-	}
+	};
 
 	state = {
 		query : '',
 		searchResults : []
-	}
+	};
 
 	/**
 	 * called on load of component. Used mainly to apply focus to search
 	 */
 	componentDidMount(){
 		this.searchInput.focus();
-	}
+	};
 
 	getShelf = (searchResult) =>{
-		const book = this.props.books.filter((myBook) => myBook.id === searchResult.id)
-		return book.length > 0 ? book[0].shelf : 'na'
-	}
+		const book = this.props.books.filter((myBook) => myBook.id === searchResult.id);
+		return book.length > 0 ? book[0].shelf : 'na';
+	};
 
 	searchBooks = (query) => {
 		this.setState({
 			query : query.trim()
-		})
+		});
+
 		BooksAPI.search(query, 10).then(searchResults => {
-			const results = (!searchResults || searchResults.error) ? [] : searchResults
+			const results = (!searchResults || searchResults.error) ? [] : searchResults;
 			this.setState({
 				searchResults : results,
 			})
 		})
-	}
+	};
 
 	render(){
-		const {query, searchResults} = this.state
-
-		const showingResults = searchResults ? searchResults : []
+		const {query, searchResults} = this.state;
 
 		return(
 			<div className="search-books">
@@ -62,9 +61,15 @@ class SearchBooks extends Component
 				<div className="search-books-results">
 					<ol className="books-grid">
 						{
-							showingResults.map((searchResult) => (
-								<Book book={searchResult} shelf={this.getShelf(searchResult)} key={searchResult.id} addToList={this.props.addToList}/>
-							))
+							searchResults.length > 0
+							?
+								(
+									searchResults.map((searchResult) => (
+										<Book book={searchResult} shelf={this.getShelf(searchResult)} key={searchResult.id} addToShelf={this.props.addToShelf}/>
+									))
+								)
+							:
+							"There are no search results"
 						}
 					</ol>
 				</div>
